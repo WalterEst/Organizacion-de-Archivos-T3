@@ -3,6 +3,18 @@
 
 FILE archivo;
 
+int menuOpciones(){
+
+    printf("Seleccione la opcion deseada: ");
+    printf("1.- Insertar vehiculo");
+    printf("2.- Mostrar vehiculos");
+    printf("3.- Eliminar vehiculos");
+    printf("4.- Modificar formato");
+    printf("5.- Modificar vehiculo");
+
+    return 0;
+}
+
 void crearArchivo(const char* nombreArchivo) {
     // Intentar abrir el archivo en modo lectura
     FILE* archivo = fopen(nombreArchivo, "r");
