@@ -5,6 +5,7 @@ FILE archivo;
 
 int menuOpciones(){
 
+    // Desplegamos el menu de opciones
     printf("Seleccione la opcion deseada: ");
     printf("1.- Insertar vehiculo");
     printf("2.- Mostrar vehiculos");
@@ -14,6 +15,8 @@ int menuOpciones(){
 
     return 0;
 }
+
+
 
 void crearArchivo(const char* nombreArchivo) {
     // Intentar abrir el archivo en modo lectura
