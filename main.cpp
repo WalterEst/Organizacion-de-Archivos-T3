@@ -1,85 +1,126 @@
 #include <stdio.h>
 
-// Función para ingresar un nuevo producto de madera y guardar en el archivo.
+// Función para ingresar datos de un auto y guardarlos en el archivo
 void Ingresar() {
+    // Abrir el archivo en modo "a" (append) para añadir nuevos autos al final
     FILE *archivo = fopen("archivo.dat", "a");
-    char marca[100], modelo[100], motor_cilindrada[100], tipo_gasolina[100], color[100];
+    if (archivo == NULL) {
+        printf("Error al abrir el archivo.\n");
+        return;
+    }
+    
+    // Declarar variables para almacenar los datos del auto
+    char marca[100], modelo[100], tipo_gasolina[100], color[100];
+    float motor_cilindrada;
+    int cantidad_asientos, cantidad_puertas;
+    
+    // Solicitar al usuario que ingrese los datos del auto
     printf("Marca: ");
     scanf("%s", marca);
     printf("Modelo: ");
     scanf("%s", modelo);
     printf("Cilindrada de motor: ");
-    scanf("%s", motor_cilindrada);
+    scanf("%f", &motor_cilindrada);
     printf("Tipo de gasolina: ");
     scanf("%s", tipo_gasolina);
+    printf("Cantidad de asientos: ");
+    scanf("%d", &cantidad_asientos);
+    printf("Cantidad de puertas: ");
+    scanf("%d", &cantidad_puertas);
+    printf("Color: ");
+    scanf("%s", color);
 
-    fprintf(archivo, "%s-%s-%s-%s\n", marca, modelo, motor_cilindrada, tipo_gasolina);
-    printf("Auto ingresado con exito.\n");
+    // Escribir los datos del auto en el archivo en un formato específico
+    fprintf(archivo, "%s-%s-%.1f-%s-%d-%d-%s\n", marca, modelo, motor_cilindrada, tipo_gasolina, cantidad_asientos, cantidad_puertas, color);
+    printf("Auto ingresado con éxito.\n");
+
+    // Cerrar el archivo
     fclose(archivo);
 }
 
-// Función para mostrar el contenido del archivo con el formato especificado.
+// Función para mostrar los datos de todos los autos en el archivo
 void Mostrar() {
+    // Abrir el archivo en modo lectura
     FILE *archivo = fopen("archivo.dat", "r");
     if (archivo == NULL) {
         printf("No se pudo abrir el archivo.\n");
+        return;
     }
 
-    char linea[1000]; // Suponemos que cada línea tiene un máximo de 1000 caracteres
+    char linea[1000];
+    // Leer y mostrar cada línea del archivo
     while (fgets(linea, sizeof(linea), archivo) != NULL) {
         printf("%s", linea);
     }
 
-    fclose(archivo); // Cierra el archivo cuando hayas terminado de leerlo
+    // Cerrar el archivo
+    fclose(archivo);
 }
 
-// Función para eliminar todos los productos de madera en el archivo.
-void Eliminar(FILE *archivo) {
-    fclose(archivo);
-    archivo = fopen("archivo.dat", "w");
+// Función para eliminar todos los autos del archivo
+void Eliminar() {
+    // Abrir el archivo en modo escritura (esto lo vaciará)
+    FILE *archivo = fopen("archivo.dat", "w");
     if (archivo == NULL) {
         printf("Error al abrir el archivo en modo escritura.\n");
         return;
     }
+    
+    // Cerrar el archivo para vaciarlo
+    fclose(archivo);
     printf("Todos los productos de auto han sido eliminados.\n");
 }
-// Función para cambiar el formato de separación entre categorías en el archivo .dat.
+
+// Función para cambiar el formato de separación en el archivo
 void CambiarFormatoEnArchivo() {
-    FILE* archivo = fopen("archivo.dat", "r+");
+    // Abrir el archivo en modo lectura y escritura
+    FILE *archivo = fopen("archivo.dat", "r+");
     if (archivo == NULL) {
         printf("No se pudo abrir el archivo.\n");
         return;
     }
 
     char formato;
+    // Solicitar al usuario que ingrese el nuevo caracter de separación
     printf("Ingresa el caracter para reemplazar ('-' o '/'): ");
-    scanf(" %c", &formato);  // Leemos un solo carácter
+    scanf(" %c", &formato);
 
     int caracter;
+    // Leer cada caracter en el archivo y reemplazar '-' o '/' por el nuevo caracter
     while ((caracter = fgetc(archivo)) != EOF) {
         if (caracter == '-' || caracter == '/') {
-            fseek(archivo, -1, SEEK_CUR);  // Retroceder un carácter
-            fputc(formato, archivo);      // Reemplazar el carácter
-            fseek(archivo, 0, SEEK_CUR);   // Ajustar el puntero a la posición actual
+            fseek(archivo, -1, SEEK_CUR);
+            fputc(formato, archivo);
+            fseek(archivo, 0, SEEK_CUR);
         }
     }
 
+    // Cerrar el archivo
     fclose(archivo);
     printf("Reemplazo completado.\n");
 }
 
-// Función para modificar una sección específica del archivo.
-void Modificar(FILE *archivo) {
-    int lineaModificar;
-    printf("Ingrese el numero de linea que desea modificar (0 para la primera linea, 1 para la segunda, y asi sucesivamente): ");
-    scanf("%d", &lineaModificar);
-
-    if (lineaModificar < 0) {
-        printf("Numero de linea no valido. Intente de nuevo.\n");
+// Función para modificar los datos de un auto en el archivo
+void Modificar() {
+    // Abrir el archivo en modo lectura y escritura
+    FILE *archivo = fopen("archivo.dat", "r+");
+    if (archivo == NULL) {
+        printf("No se pudo abrir el archivo.\n");
         return;
     }
 
-    // Crear un archivo temporal para escribir los cambios.
+    int lineaModificar;
+    // Solicitar al usuario que ingrese el número de línea a modificar
+    printf("Ingrese el número de línea que desea modificar (0 para la primera línea, 1 para la segunda, y así sucesivamente): ");
+    scanf("%d", &lineaModificar);
+
+    if (lineaModificar < 0) {
+        printf("Número de línea no válido. Intente de nuevo.\n");
+        fclose(archivo);
+        return;
+    }
+
+    // Abrir un archivo temporal para escribir los nuevos datos
     FILE *tempArchivo = fopen("temp.dat", "w");
     rewind(archivo);
 
@@ -88,51 +129,57 @@ void Modificar(FILE *archivo) {
 
     while (fgets(linea, sizeof(linea), archivo)) {
         if (lineaActual == lineaModificar) {
-            char marca[100], modelo[100], motor_cilindrada[100], tipo_gasolina[100], color[100];
+            // Leer los nuevos datos del auto del usuario
+            char marca[100], modelo[100], tipo_gasolina[100], color[100];
+            float motor_cilindrada;
+            int cantidad_asientos, cantidad_puertas;
             printf("Marca: ");
             scanf("%s", marca);
             printf("Modelo: ");
             scanf("%s", modelo);
             printf("Cilindrada de motor: ");
-            scanf("%s", motor_cilindrada);
+            scanf("%f", &motor_cilindrada);
             printf("Tipo de gasolina: ");
             scanf("%s", tipo_gasolina);
+            printf("Cantidad de asientos: ");
+            scanf("%d", &cantidad_asientos);
+            printf("Cantidad de puertas: ");
+            scanf("%d", &cantidad_puertas);
+            printf("Color: ");
+            scanf("%s", color);
 
-            fprintf(tempArchivo, "%s-%s-%s-%s\n", marca, modelo,  motor_cilindrada, tipo_gasolina);
-            printf("Linea modificada con exito.\n");
+            // Escribir los nuevos datos en el archivo
+            fprintf(archivo, "%s-%s-%.1f-%s-%d-%d-%s\n", marca, modelo, motor_cilindrada, tipo_gasolina, cantidad_asientos, cantidad_puertas, color);
+            printf("Línea modificada con éxito.\n");
         } else {
+            // Copiar la línea original al archivo temporal
             fputs(linea, tempArchivo);
         }
         lineaActual++;
     }
+    // Cerrar los archivos
     fclose(tempArchivo);
     fclose(archivo);
 
-    // Reemplazar el archivo original con el archivo temporal.
+    // Eliminar el archivo original y renombrar el archivo temporal
     remove("archivo.dat");
     rename("temp.dat", "archivo.dat");
+
+    // Llamar a la función para cambiar el formato en el archivo
     CambiarFormatoEnArchivo();
 }
 
 int main() {
-    FILE *archivo = fopen("archivo.dat", "a+");
-    if (archivo == NULL) {
-        printf("Error al abrir o crear el archivo.\n");
-        return 1;
-    }
-
-    char formato = '-';
-
     int opcion;
     do {
         printf("\nMenu de opciones:\n");
         printf("1. Ingresar\n");
         printf("2. Mostrar\n");
         printf("3. Eliminar\n");
-        printf("4. Cambiar el formato en el archivo .dat\n");
+        printf("4. Cambiar el formato en el archivo.dat\n");
         printf("5. Modificar\n");
         printf("0. Salir\n");
-        printf("Ingrese su eleccion: ");
+        printf("Ingrese su elección: ");
         scanf("%d", &opcion);
 
         switch (opcion) {
@@ -143,22 +190,21 @@ int main() {
                 Mostrar();
                 break;
             case 3:
-                Eliminar(archivo);
+                Eliminar();
                 break;
             case 4:
                 CambiarFormatoEnArchivo();
                 break;
             case 5:
-                Modificar(archivo);
+                Modificar();
                 break;
             case 0:
                 printf("Saliendo del programa.\n");
                 break;
             default:
-                printf("Opcion no valida. Intente de nuevo.\n");
+                printf("Opción no válida. Intente de nuevo.\n");
         }
     } while (opcion != 0);
 
-    fclose(archivo);
     return 0;
 }
