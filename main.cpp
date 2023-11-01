@@ -50,7 +50,8 @@ void Mostrar() {
     char linea[1000];
     // Leer y mostrar cada línea del archivo
     while (fgets(linea, sizeof(linea), archivo) != NULL) {
-        printf("%s", linea);
+        printf(" \n");
+        printf("%s \n", linea);
     }
 
     // Cerrar el archivo
@@ -68,7 +69,7 @@ void Eliminar() {
     
     // Cerrar el archivo para vaciarlo
     fclose(archivo);
-    printf("Todos los productos de auto han sido eliminados.\n");
+    printf("Los vehiculos han sido eliminados.\n");
 }
 
 // Función para cambiar el formato de separación en el archivo
@@ -111,11 +112,11 @@ void Modificar() {
 
     int lineaModificar;
     // Solicitar al usuario que ingrese el número de línea a modificar
-    printf("Ingrese el número de línea que desea modificar (0 para la primera línea, 1 para la segunda, y así sucesivamente): ");
+    printf("Ingrese el numero de linea que desea modificar (0 para la primera linea, 1 para la segunda, y asi sucesivamente): ");
     scanf("%d", &lineaModificar);
 
     if (lineaModificar < 0) {
-        printf("Número de línea no válido. Intente de nuevo.\n");
+        printf("Numero de linea no valido. Intente de nuevo.\n");
         fclose(archivo);
         return;
     }
@@ -172,6 +173,7 @@ void Modificar() {
 int main() {
     int opcion;
     do {
+        printf("-------------------- CRUD DE AUTOMOVILES --------------------");
         printf("\nMenu de opciones:\n");
         printf("1. Ingresar\n");
         printf("2. Mostrar\n");
@@ -179,7 +181,8 @@ int main() {
         printf("4. Cambiar el formato en el archivo.dat\n");
         printf("5. Modificar\n");
         printf("0. Salir\n");
-        printf("Ingrese su elección: ");
+        printf("-------------------- CRUD DE AUTOMOVILES -------------------- \n");
+        printf("Ingrese su eleccion: ");
         scanf("%d", &opcion);
 
         switch (opcion) {
@@ -202,7 +205,7 @@ int main() {
                 printf("Saliendo del programa.\n");
                 break;
             default:
-                printf("Opción no válida. Intente de nuevo.\n");
+                printf("Opcion invalida.\n");
         }
     } while (opcion != 0);
 
