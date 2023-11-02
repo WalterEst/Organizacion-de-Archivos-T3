@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <stdio.h>
 
 // Funcion para obtener el valor del contador desde un archivo
 int ObtenerContador() {
