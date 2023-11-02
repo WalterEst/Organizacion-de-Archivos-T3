@@ -1,12 +1,14 @@
 #include <stdio.h>
 
 int ObtenerContador() {
+
+    // Instanciamos un nuevo archivo llamado contador.txt
     FILE *contadorArchivo = fopen("contador.txt", "r");
     if (contadorArchivo == NULL) {
-        return 0; // Si el archivo no existe, el contador se inicia en 1
+        return 0; // Si el archivo no existe, el contador se inicia en 0
     }
-    
     int contador;
+
     fscanf(contadorArchivo, "%d", &contador);
     fclose(contadorArchivo);
     return contador;
@@ -22,6 +24,7 @@ void ActualizarContador(int nuevoContador) {
     fprintf(contadorArchivo, "%d", nuevoContador);
     fclose(contadorArchivo);
 }
+
 
 // Declarar la función Ingresar
 void Ingresar() {
@@ -68,7 +71,6 @@ void Ingresar() {
     // Cerrar el archivo
     fclose(archivo);
 }
-
 
 
 // Función para mostrar los datos de todos los autos en el archivo
@@ -133,75 +135,6 @@ void CambiarFormatoEnArchivo() {
     printf("Reemplazo completado.\n");
 }
 
-// Función para modificar los datos de un auto en el archivo
-void Modificar() {
-    // Abrir el archivo en modo lectura y escritura
-    FILE *archivo = fopen("archivo.dat", "r+");
-    if (archivo == NULL) {
-        printf("No se pudo abrir el archivo.\n");
-        return;
-    }
-
-    int lineaModificar;
-    // Solicitar al usuario que ingrese el número de línea a modificar
-    printf("Ingrese el numero de linea que desea modificar (0 para la primera linea, 1 para la segunda, y asi sucesivamente): ");
-    scanf("%d", &lineaModificar);
-
-    if (lineaModificar < 0) {
-        printf("Numero de linea no valido. Intente de nuevo.\n");
-        fclose(archivo);
-        return;
-    }
-
-    // Abrir un archivo temporal para escribir los nuevos datos
-    FILE *tempArchivo = fopen("temp.dat", "w");
-    rewind(archivo);
-
-    char linea[256];
-    int lineaActual = 0;
-
-    while (fgets(linea, sizeof(linea), archivo)) {
-        if (lineaActual == lineaModificar) {
-            // Leer los nuevos datos del auto del usuario
-            char marca[100], modelo[100], tipo_gasolina[100], color[100];
-            float motor_cilindrada;
-            int cantidad_asientos, cantidad_puertas;
-            printf("Marca: ");
-            scanf("%s", marca);
-            printf("Modelo: ");
-            scanf("%s", modelo);
-            printf("Cilindrada de motor: ");
-            scanf("%f", &motor_cilindrada);
-            printf("Tipo de gasolina: ");
-            scanf("%s", tipo_gasolina);
-            printf("Cantidad de asientos: ");
-            scanf("%d", &cantidad_asientos);
-            printf("Cantidad de puertas: ");
-            scanf("%d", &cantidad_puertas);
-            printf("Color: ");
-            scanf("%s", color);
-
-            // Escribir los nuevos datos en el archivo
-            fprintf(archivo, "%s-%s-%.1f-%s-%d-%d-%s\n", marca, modelo, motor_cilindrada, tipo_gasolina, cantidad_asientos, cantidad_puertas, color);
-            printf("Línea modificada con éxito.\n");
-        } else {
-            // Copiar la línea original al archivo temporal
-            fputs(linea, tempArchivo);
-        }
-        lineaActual++;
-    }
-    // Cerrar los archivos
-    fclose(tempArchivo);
-    fclose(archivo);
-
-    // Eliminar el archivo original y renombrar el archivo temporal
-    remove("archivo.dat");
-    rename("temp.dat", "archivo.dat");
-
-    // Llamar a la función para cambiar el formato en el archivo
-    CambiarFormatoEnArchivo();
-}
-
 int main() {
     int opcion;
     do {
@@ -211,7 +144,7 @@ int main() {
         printf("2. Mostrar\n");
         printf("3. Eliminar\n");
         printf("4. Cambiar el formato en el archivo.dat\n");
-        printf("5. Modificar\n");
+        printf("5. Modificar (No disponible)\n");
         printf("0. Salir\n");
         printf("-------------------- CRUD DE AUTOMOVILES -------------------- \n");
         printf("Ingrese su eleccion: ");
@@ -231,7 +164,7 @@ int main() {
                 CambiarFormatoEnArchivo();
                 break;
             case 5:
-                Modificar();
+                printf("Funcion por agregar \n");
                 break;
             case 0:
                 printf("Saliendo del programa.\n");
