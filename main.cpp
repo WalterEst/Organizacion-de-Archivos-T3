@@ -217,19 +217,19 @@ void CambiarFormatoEnArchivo() {
     // Abrir el archivo en modo lectura y escritura
     FILE *archivo = fopen("archivo.dat", "r+");
     if (archivo == NULL) {
-        printf("No se pudo abrir el archivo.\n");
+        printf("El archivo no se puede abrir.\n");
         return;
     }
 
     char formato;
     // Solicitar al usuario que ingrese el nuevo caracter de separación
-    printf("Ingresa el caracter para reemplazar ('-' o '/'): ");
+    printf("Ingresa separador ('-' o '/' o ';' o ':'): ");
     scanf(" %c", &formato);
 
     int caracter;
     // Leer cada caracter en el archivo y reemplazar '-' o '/' por el nuevo caracter
     while ((caracter = fgetc(archivo)) != EOF) {
-        if (caracter == '-' || caracter == '/') {
+        if (caracter == '-' || caracter == '/' || caracter == ';' || caracter == ':') {
             fseek(archivo, -1, SEEK_CUR);
             fputc(formato, archivo);
             fseek(archivo, 0, SEEK_CUR);
