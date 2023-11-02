@@ -1,14 +1,42 @@
 #include <stdio.h>
 
-// Función para ingresar datos de un auto y guardarlos en el archivo
+int ObtenerContador() {
+    FILE *contadorArchivo = fopen("contador.txt", "r");
+    if (contadorArchivo == NULL) {
+        return 0; // Si el archivo no existe, el contador se inicia en 1
+    }
+    
+    int contador;
+    fscanf(contadorArchivo, "%d", &contador);
+    fclose(contadorArchivo);
+    return contador;
+}
+
+// Declarar una función para actualizar el contador
+void ActualizarContador(int nuevoContador) {
+    FILE *contadorArchivo = fopen("contador.txt", "w");
+    if (contadorArchivo == NULL) {
+        printf("Error al abrir el archivo del contador.\n");
+        return;
+    }
+    fprintf(contadorArchivo, "%d", nuevoContador);
+    fclose(contadorArchivo);
+}
+
+// Declarar la función Ingresar
 void Ingresar() {
-    // Abrir el archivo en modo "a" (append) para añadir nuevos autos al final
     FILE *archivo = fopen("archivo.dat", "a");
     if (archivo == NULL) {
         printf("Error al abrir el archivo.\n");
         return;
     }
     
+    // Obtener el valor actual del contador
+    int numeroFila = ObtenerContador();
+
+    // Incrementar el contador para la siguiente inserción
+    numeroFila++;
+
     // Declarar variables para almacenar los datos del auto
     char marca[100], modelo[100], tipo_gasolina[100], color[100];
     float motor_cilindrada;
@@ -30,13 +58,18 @@ void Ingresar() {
     printf("Color: ");
     scanf("%s", color);
 
-    // Escribir los datos del auto en el archivo en un formato específico
-    fprintf(archivo, "%s-%s-%.1f-%s-%d-%d-%s\n", marca, modelo, motor_cilindrada, tipo_gasolina, cantidad_asientos, cantidad_puertas, color);
+    // Escribir los datos del auto en el archivo en un formato específico con el número de fila
+    fprintf(archivo, "%d: %s-%s-%.1f-%s-%d-%d-%s\n", numeroFila, marca, modelo, motor_cilindrada, tipo_gasolina, cantidad_asientos, cantidad_puertas, color);
     printf("Auto ingresado con éxito.\n");
+
+    // Actualizar el contador en el archivo
+    ActualizarContador(numeroFila);
 
     // Cerrar el archivo
     fclose(archivo);
 }
+
+
 
 // Función para mostrar los datos de todos los autos en el archivo
 void Mostrar() {
@@ -50,7 +83,6 @@ void Mostrar() {
     char linea[1000];
     // Leer y mostrar cada línea del archivo
     while (fgets(linea, sizeof(linea), archivo) != NULL) {
-        printf(" \n");
         printf("%s \n", linea);
     }
 
