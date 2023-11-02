@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-// Función para obtener el valor del contador desde un archivo
+// Funcion para obtener el valor del contador desde un archivo
 int ObtenerContador() {
 
     // Abrimos el archivo "contador.txt" en modo lectura
@@ -16,13 +16,13 @@ int ObtenerContador() {
     return contador; // Devolvemos el valor del contador
 }
 
-// Función para actualizar el valor del contador en el archivo
+// Funcion para actualizar el valor del contador en el archivo
 void ActualizarContador(int nuevoContador) {
     FILE *contadorArchivo = fopen("contador.txt", "w");
 
     if (contadorArchivo == NULL) {
         printf("Error al abrir el archivo del contador.\n");
-        return; // Si no se pudo abrir el archivo, mostramos un mensaje de error y salimos de la función
+        return; // Si no se pudo abrir el archivo, mostramos un mensaje de error y salimos de la funcion
     }
 
     // Escribimos el nuevo valor del contador en el archivo
@@ -30,7 +30,7 @@ void ActualizarContador(int nuevoContador) {
     fclose(contadorArchivo); // Cerramos el archivo
 }
 
-// Declarar la función Ingresar
+// Declarar la funcion Ingresar
 void Ingresar() {
     FILE *archivo = fopen("archivo.dat", "a");
     if (archivo == NULL) {
@@ -41,7 +41,7 @@ void Ingresar() {
     // Obtener el valor actual del contador
     int numeroFila = ObtenerContador();
 
-    // Incrementar el contador para la siguiente inserción
+    // Incrementar el contador para la siguiente insercion
     numeroFila++;
 
     // Declarar variables para almacenar los datos del auto
@@ -65,9 +65,9 @@ void Ingresar() {
     printf("Color: ");
     scanf("%s", color);
 
-    // Escribir los datos del auto en el archivo en un formato específico con el número de fila
+    // Escribir los datos del auto en el archivo en un formato especifico con el numero de fila
     fprintf(archivo, "%d: %s-%s-%.1f-%s-%d-%d-%s\n", numeroFila, marca, modelo, motor_cilindrada, tipo_gasolina, cantidad_asientos, cantidad_puertas, color);
-    printf("Auto ingresado con éxito.\n");
+    printf("Auto ingresado con exito.\n");
 
     // Actualizar el contador en el archivo
     ActualizarContador(numeroFila);
@@ -76,7 +76,7 @@ void Ingresar() {
     fclose(archivo);
 }
 
-// Función para abrir y mostrar el contenido de un archivo
+// Funcion para abrir y mostrar el contenido de un archivo
 void Mostrar() {
     // Abrir el archivo "archivo.dat" en modo lectura
     FILE *archivo = fopen("archivo.dat", "r");
@@ -86,17 +86,17 @@ void Mostrar() {
     }
 
     char linea[1000];
-    // Leer y mostrar cada línea del archivo
+    // Leer y mostrar cada linea del archivo
     while (fgets(linea, sizeof(linea), archivo) != NULL) {
-        printf("%s \n", linea); // Imprimir cada línea en la consola
+        printf("%s \n", linea); // Imprimir cada linea en la consola
     }
 
-    // Cerrar el archivo después de leerlo
+    // Cerrar el archivo despues de leerlo
     fclose(archivo);
 }
 
 
-// Función para eliminar una entrada de un archivo
+// Funcion para eliminar una entrada de un archivo
 void Eliminar() {
     // Abrir el archivo original en modo lectura
     FILE *archivoLectura = fopen("archivo.dat", "r");
@@ -118,15 +118,15 @@ void Eliminar() {
     scanf("%d", &idAEliminar);
 
     int idAutomovil;
-    char linea[1000]; // Suponemos que cada línea en el archivo tiene un máximo de 1000 caracteres
+    char linea[1000]; // Suponemos que cada linea en el archivo tiene un maximo de 1000 caracteres
 
     while (fgets(linea, sizeof(linea), archivoLectura) != NULL) {
         sscanf(linea, "%d", &idAutomovil);
 
         if (idAutomovil == idAEliminar) {
-            printf("El automóvil con el ID %d ha sido eliminado.\n", idAEliminar); // Mostrar un mensaje de confirmación de eliminación
+            printf("El automovil con el ID %d ha sido eliminado.\n", idAEliminar); // Mostrar un mensaje de confirmacion de eliminacion
         } else {
-            fprintf(archivoTemporal, "%s", linea); // Escribir la línea en el archivo temporal si no se debe eliminar
+            fprintf(archivoTemporal, "%s", linea); // Escribir la linea en el archivo temporal si no se debe eliminar
         }
     }
 
@@ -148,7 +148,7 @@ void Eliminar() {
 }
 
 
-// Función para modificar un automóvil por su ID
+// Funcion para modificar un automovil por su ID
 void Modificar() {
     FILE *archivoLectura = fopen("archivo.dat", "r");
     if (archivoLectura == NULL) {
@@ -164,7 +164,7 @@ void Modificar() {
     }
 
     int idAModificar;
-    printf("Ingrese el ID del automóvil que desea modificar: ");
+    printf("Ingrese el ID del automovil que desea modificar: ");
     scanf("%d", &idAModificar);
 
     int idAutomovil;
@@ -174,7 +174,7 @@ void Modificar() {
         sscanf(linea, "%d", &idAutomovil);
 
         if (idAutomovil == idAModificar) {
-            printf("El automóvil con el ID %d ha sido encontrado.\n", idAModificar);
+            printf("Automovil con el ID %d.\n", idAModificar);
 
             // Solicitar al usuario que ingrese los datos modificados
             char marca[100], modelo[100], tipo_gasolina[100], color[100];
@@ -198,9 +198,9 @@ void Modificar() {
 
             // Escribir los datos modificados en el archivo temporal
             fprintf(archivoTemporal, "%d: %s-%s-%.1f-%s-%d-%d-%s\n", idAModificar, marca, modelo, motor_cilindrada, tipo_gasolina, cantidad_asientos, cantidad_puertas, color);
-            printf("Automóvil modificado con éxito.\n");
+            printf("Automovil modificado con exito.\n");
         } else {
-            // Si no es el automóvil a modificar, simplemente copiar la línea al archivo temporal
+            // Si no es el automovil a modificar, simplemente copiar la linea al archivo temporal
             fprintf(archivoTemporal, "%s", linea);
         }
     }
@@ -219,7 +219,7 @@ void Modificar() {
     }
 }
 
-// Función para cambiar el formato de separación en el archivo
+// Funcion para cambiar el formato de separacion en el archivo
 void CambiarFormatoEnArchivo() {
     // Abrir el archivo en modo lectura y escritura
     FILE *archivo = fopen("archivo.dat", "r+");
@@ -229,7 +229,7 @@ void CambiarFormatoEnArchivo() {
     }
 
     char formato;
-    // Solicitar al usuario que ingrese el nuevo caracter de separación
+    // Solicitar al usuario que ingrese el nuevo caracter de separacion
     printf("Ingresa separador ('-' o '/' o ';' o ':'): ");
     scanf(" %c", &formato);
 
