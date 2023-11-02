@@ -94,16 +94,122 @@ void Mostrar() {
 
 // Función para eliminar todos los autos del archivo
 void Eliminar() {
-    // Abrir el archivo en modo escritura (esto lo vaciará)
-    FILE *archivo = fopen("archivo.dat", "w");
-    if (archivo == NULL) {
-        printf("Error al abrir el archivo en modo escritura.\n");
+    // Abrir el archivo original en modo lectura
+    FILE *archivoLectura = fopen("archivo.dat", "r");
+    if (archivoLectura == NULL) {
+        printf("No se pudo abrir el archivo para lectura.\n");
         return;
     }
-    
-    // Cerrar el archivo para vaciarlo
-    fclose(archivo);
-    printf("Los vehiculos han sido eliminados.\n");
+
+    // Abrir un archivo temporal en modo escritura
+    FILE *archivoTemporal = fopen("temporal.dat", "w");
+    if (archivoTemporal == NULL) {
+        printf("No se pudo abrir el archivo temporal.\n");
+        fclose(archivoLectura);
+        return;
+    }
+
+    int idAEliminar;
+    printf("Ingrese el ID del automóvil que desea eliminar: ");
+    scanf("%d", &idAEliminar);
+
+    int idAutomovil;
+    char linea[1000]; // Suponemos que cada línea en el archivo tiene un máximo de 1000 caracteres
+
+    while (fgets(linea, sizeof(linea), archivoLectura) != NULL) {
+        sscanf(linea, "%d", &idAutomovil);
+
+        if (idAutomovil == idAEliminar) {
+            printf("El automóvil con el ID %d ha sido eliminado.\n", idAEliminar);
+        } else {
+            fprintf(archivoTemporal, "%s", linea);
+        }
+    }
+
+    // Cerrar los archivos
+    fclose(archivoLectura);
+    fclose(archivoTemporal);
+
+    // Eliminar el archivo original
+    if (remove("archivo.dat") != 0) {
+        printf("Error al eliminar el archivo original.\n");
+        return;
+    }
+
+    // Renombrar el archivo temporal
+    if (rename("temporal.dat", "archivo.dat") != 0) {
+        printf("Error al renombrar el archivo temporal.\n");
+        return;
+    }
+}
+
+void Modificar() {
+    FILE *archivoLectura = fopen("archivo.dat", "r");
+    if (archivoLectura == NULL) {
+        printf("No se pudo abrir el archivo para lectura.\n");
+        return;
+    }
+
+    FILE *archivoTemporal = fopen("temporal.dat", "w");
+    if (archivoTemporal == NULL) {
+        printf("No se pudo abrir el archivo temporal.\n");
+        fclose(archivoLectura);
+        return;
+    }
+
+    int idAModificar;
+    printf("Ingrese el ID del automóvil que desea modificar: ");
+    scanf("%d", &idAModificar);
+
+    int idAutomovil;
+    char linea[1000];
+
+    while (fgets(linea, sizeof(linea), archivoLectura) != NULL) {
+        sscanf(linea, "%d", &idAutomovil);
+
+        if (idAutomovil == idAModificar) {
+            printf("El automóvil con el ID %d ha sido encontrado.\n", idAModificar);
+
+            // Solicitar al usuario que ingrese los datos modificados
+            char marca[100], modelo[100], tipo_gasolina[100], color[100];
+            float motor_cilindrada;
+            int cantidad_asientos, cantidad_puertas;
+
+            printf("Nueva Marca: ");
+            scanf("%s", marca);
+            printf("Nuevo Modelo: ");
+            scanf("%s", modelo);
+            printf("Nueva Cilindrada de motor: ");
+            scanf("%f", &motor_cilindrada);
+            printf("Nuevo Tipo de gasolina: ");
+            scanf("%s", tipo_gasolina);
+            printf("Nueva Cantidad de asientos: ");
+            scanf("%d", &cantidad_asientos);
+            printf("Nueva Cantidad de puertas: ");
+            scanf("%d", &cantidad_puertas);
+            printf("Nuevo Color: ");
+            scanf("%s", color);
+
+            // Escribir los datos modificados en el archivo temporal
+            fprintf(archivoTemporal, "%d: %s-%s-%.1f-%s-%d-%d-%s\n", idAModificar, marca, modelo, motor_cilindrada, tipo_gasolina, cantidad_asientos, cantidad_puertas, color);
+            printf("Automóvil modificado con éxito.\n");
+        } else {
+            fprintf(archivoTemporal, "%s", linea);
+        }
+    }
+
+    fclose(archivoLectura);
+    fclose(archivoTemporal);
+
+    if (remove("archivo.dat") != 0) {
+        printf("Error al eliminar el archivo original.\n");
+        return;
+    }
+
+    if (rename("temporal.dat", "archivo.dat") != 0) {
+        printf("Error al renombrar el archivo temporal.\n");
+        return;
+    }
 }
 
 // Función para cambiar el formato de separación en el archivo
@@ -143,8 +249,8 @@ int main() {
         printf("1. Ingresar\n");
         printf("2. Mostrar\n");
         printf("3. Eliminar\n");
-        printf("4. Cambiar el formato en el archivo.dat\n");
-        printf("5. Modificar (No disponible)\n");
+        printf("4. Modificar \n");
+        printf("5. Cambiar el formato en el archivo.dat\n");
         printf("0. Salir\n");
         printf("-------------------- CRUD DE AUTOMOVILES -------------------- \n");
         printf("Ingrese su eleccion: ");
@@ -161,10 +267,10 @@ int main() {
                 Eliminar();
                 break;
             case 4:
-                CambiarFormatoEnArchivo();
+                Modificar();
                 break;
             case 5:
-                printf("Funcion por agregar \n");
+                CambiarFormatoEnArchivo();
                 break;
             case 0:
                 printf("Saliendo del programa.\n");
