@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdio.h>
 
 // Funcion para obtener el valor del contador desde un archivo
 int ObtenerContador() {
@@ -257,7 +258,7 @@ int main() {
         printf("2. Mostrar\n");
         printf("3. Eliminar\n");
         printf("4. Modificar\n");
-        printf("5. Cambiar el formato en el archivo.dat\n");
+        printf("5. Cambiar separador\n");
         printf("0. Salir\n");
         printf("-------------------- CRUD DE AUTOMOVILES -------------------- \n");
         printf("Ingrese su eleccion: ");
