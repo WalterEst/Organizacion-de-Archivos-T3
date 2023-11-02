@@ -230,7 +230,7 @@ void CambiarFormatoEnArchivo() {
 
     char formato;
     // Solicitar al usuario que ingrese el nuevo caracter de separacion
-    printf("Ingresa separador ('-' o '/' o ';' o ':'): ");
+    printf("Ingresa separador, '-' o '/' o ';' o ':': ");
     scanf(" %c", &formato);
 
     int caracter;
