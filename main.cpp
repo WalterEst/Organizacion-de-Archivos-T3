@@ -1,30 +1,34 @@
 #include <stdio.h>
 
+// Función para obtener el valor del contador desde un archivo
 int ObtenerContador() {
 
-    // Instanciamos un nuevo archivo llamado contador.txt
+    // Abrimos el archivo "contador.txt" en modo lectura
     FILE *contadorArchivo = fopen("contador.txt", "r");
     if (contadorArchivo == NULL) {
         return 0; // Si el archivo no existe, el contador se inicia en 0
     }
     int contador;
 
+    // Leemos el valor del contador desde el archivo
     fscanf(contadorArchivo, "%d", &contador);
-    fclose(contadorArchivo);
-    return contador;
+    fclose(contadorArchivo); // Cerramos el archivo
+    return contador; // Devolvemos el valor del contador
 }
 
-// Declarar una función para actualizar el contador
+// Función para actualizar el valor del contador en el archivo
 void ActualizarContador(int nuevoContador) {
     FILE *contadorArchivo = fopen("contador.txt", "w");
+
     if (contadorArchivo == NULL) {
         printf("Error al abrir el archivo del contador.\n");
-        return;
+        return; // Si no se pudo abrir el archivo, mostramos un mensaje de error y salimos de la función
     }
-    fprintf(contadorArchivo, "%d", nuevoContador);
-    fclose(contadorArchivo);
-}
 
+    // Escribimos el nuevo valor del contador en el archivo
+    fprintf(contadorArchivo, "%d", nuevoContador);
+    fclose(contadorArchivo); // Cerramos el archivo
+}
 
 // Declarar la función Ingresar
 void Ingresar() {
@@ -72,45 +76,45 @@ void Ingresar() {
     fclose(archivo);
 }
 
-
-// Función para mostrar los datos de todos los autos en el archivo
+// Función para abrir y mostrar el contenido de un archivo
 void Mostrar() {
-    // Abrir el archivo en modo lectura
+    // Abrir el archivo "archivo.dat" en modo lectura
     FILE *archivo = fopen("archivo.dat", "r");
     if (archivo == NULL) {
-        printf("No se pudo abrir el archivo.\n");
+        printf("No se pudo abrir el archivo.\n"); // Mostrar un mensaje de error si no se puede abrir el archivo
         return;
     }
 
     char linea[1000];
     // Leer y mostrar cada línea del archivo
     while (fgets(linea, sizeof(linea), archivo) != NULL) {
-        printf("%s \n", linea);
+        printf("%s \n", linea); // Imprimir cada línea en la consola
     }
 
-    // Cerrar el archivo
+    // Cerrar el archivo después de leerlo
     fclose(archivo);
 }
 
-// Función para eliminar todos los autos del archivo
+
+// Función para eliminar una entrada de un archivo
 void Eliminar() {
     // Abrir el archivo original en modo lectura
     FILE *archivoLectura = fopen("archivo.dat", "r");
     if (archivoLectura == NULL) {
-        printf("No se pudo abrir el archivo para lectura.\n");
+        printf("No se pudo abrir el archivo para lectura.\n"); // Mostrar un mensaje de error si no se puede abrir el archivo
         return;
     }
 
     // Abrir un archivo temporal en modo escritura
     FILE *archivoTemporal = fopen("temporal.dat", "w");
     if (archivoTemporal == NULL) {
-        printf("No se pudo abrir el archivo temporal.\n");
-        fclose(archivoLectura);
+        printf("No se pudo abrir el archivo temporal.\n"); // Mostrar un mensaje de error si no se puede abrir el archivo temporal
+        fclose(archivoLectura); // Cerrar el archivo original si no se puede abrir el archivo temporal
         return;
     }
 
     int idAEliminar;
-    printf("Ingrese el ID del automóvil que desea eliminar: ");
+    printf("ID a eliminar: ");
     scanf("%d", &idAEliminar);
 
     int idAutomovil;
@@ -120,9 +124,9 @@ void Eliminar() {
         sscanf(linea, "%d", &idAutomovil);
 
         if (idAutomovil == idAEliminar) {
-            printf("El automóvil con el ID %d ha sido eliminado.\n", idAEliminar);
+            printf("El automóvil con el ID %d ha sido eliminado.\n", idAEliminar); // Mostrar un mensaje de confirmación de eliminación
         } else {
-            fprintf(archivoTemporal, "%s", linea);
+            fprintf(archivoTemporal, "%s", linea); // Escribir la línea en el archivo temporal si no se debe eliminar
         }
     }
 
@@ -132,16 +136,17 @@ void Eliminar() {
 
     // Eliminar el archivo original
     if (remove("archivo.dat") != 0) {
-        printf("Error al eliminar el archivo original.\n");
+        printf("Error al eliminar el archivo original.\n"); // Mostrar un mensaje de error si no se puede eliminar el archivo original
         return;
     }
 
     // Renombrar el archivo temporal
     if (rename("temporal.dat", "archivo.dat") != 0) {
-        printf("Error al renombrar el archivo temporal.\n");
+        printf("Error al renombrar el archivo temporal.\n"); // Mostrar un mensaje de error si no se puede renombrar el archivo temporal
         return;
     }
 }
+
 
 // Función para modificar un automóvil por su ID
 void Modificar() {
