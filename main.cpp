@@ -143,6 +143,7 @@ void Eliminar() {
     }
 }
 
+// Función para modificar un automóvil por su ID
 void Modificar() {
     FILE *archivoLectura = fopen("archivo.dat", "r");
     if (archivoLectura == NULL) {
@@ -153,7 +154,7 @@ void Modificar() {
     FILE *archivoTemporal = fopen("temporal.dat", "w");
     if (archivoTemporal == NULL) {
         printf("No se pudo abrir el archivo temporal.\n");
-        fclose(archivoLectura);
+        fclose(archivoLectura); // Cerrar el archivo de lectura si no se pudo abrir el temporal
         return;
     }
 
@@ -194,6 +195,7 @@ void Modificar() {
             fprintf(archivoTemporal, "%d: %s-%s-%.1f-%s-%d-%d-%s\n", idAModificar, marca, modelo, motor_cilindrada, tipo_gasolina, cantidad_asientos, cantidad_puertas, color);
             printf("Automóvil modificado con éxito.\n");
         } else {
+            // Si no es el automóvil a modificar, simplemente copiar la línea al archivo temporal
             fprintf(archivoTemporal, "%s", linea);
         }
     }
